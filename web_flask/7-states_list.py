@@ -1,25 +1,34 @@
+
 #!/usr/bin/python3
-""" storage docs """
+"""
+starts a Flask application
+/states_list: display a HTML
+"""
 from flask import Flask, render_template
 from models import storage
+from models import *
 from models.state import State
-
 
 app = Flask(__name__)
 
 
-@app.route("/states_list", strict_slashes=False)
+@app.route('/states_list', strict_slashes=False)
 def states_list():
-    """Displays a HTML """
-    states = storage.all(State).values()
-    return render_template("7-states_list.html", states=states)
+    """
+    /states_list: display a HTML: (inside the tag BODY)
+    """
+    states = storage.all(State)
+
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
 def teardown(exception):
-    """close connection"""
-    storage.close()
+    """ Remove the current SQLAlchemy Session """
+    return storage.close()
 
 
-if __name__ == "__main___":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    """ Run the web app on 0.0.0.0 port 5000 """
+    app.run(host='0.0.0.0', port=5000)
+
